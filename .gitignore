@@ -1,0 +1,53 @@
+# Dependencies
+/vendor
+/node_modules
+
+# Build assets
+/public/build
+/public/hot
+/public/storage
+
+# Storage
+/storage/*.key
+/storage/app/public
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/views
+/storage/logs
+/storage/pail
+
+# Cache & Bootstrap
+/bootstrap/cache/*.php
+
+# Environment files (NEVER commit these)
+.env
+.env.backup
+.env.production
+.env.*.local
+
+# Testing
+.phpunit.result.cache
+/.phpunit.cache
+
+# Logs
+npm-debug.log
+yarn-error.log
+
+# IDE & Editor
+/.vscode
+/.idea
+/.fleet
+/.nova
+/.zed
+.phpactor.json
+
+# Auth
+/auth.json
+
+# Config files (optional)
+Homestead.json
+Homestead.yaml
+
+# OS
+.DS_Store
+Thumbs.db
