@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+            
+            $table->unsignedBigInteger('tenant_id');
+            $table->foreign('tenant_id')->references('id')->on('tenants');
+
+
+            $table->string('amount');
+            $table->date('date');
+            $table->payment_method('priority');
+            $table->enum('status', ['paid', 'pending',]);
+
             $table->timestamps();
         });
     }

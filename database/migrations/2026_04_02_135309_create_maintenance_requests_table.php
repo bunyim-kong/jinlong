@@ -13,6 +13,21 @@ return new class extends Migration
     {
         Schema::create('maintenance_requests', function (Blueprint $table) {
             $table->id();
+            
+            $table->unsignedBigInteger('tenant_id');
+            $table->foreign('tenant_id')->references('id')->on('tenants');
+
+            $table->unsignedBigInteger('unit_id');
+            $table->foreign('unit_id')->references('id')->on('units');
+
+            $table->string('title');
+            $table->text('description');
+            $table->string('priority');
+            $table->date('request_date');
+            $table->date('completed_date');
+            $table->enum('status', ['paid', 'pending',]);
+
+
             $table->timestamps();
         });
     }
