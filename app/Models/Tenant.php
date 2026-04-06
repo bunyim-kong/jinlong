@@ -6,5 +6,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tenant extends Model
 {
-    //
+    protected $table = 'tenants';
+
+    protected $primaryKey = 'id';
+
+    protected $fillable = [
+    'user_id',
+    'sex',
+    'dop',
+    'address',
+    'phone_number',
+    'email',
+];
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function maintananceRquest()
+    {
+        return $this->hasMany(MaintananceRquest::class, 'tenants_id', 'id');
+    }
+    public function leases()
+    {
+        return $this->hasMany(Lease::class, 'tenants_id', 'id');
+    }
 }
