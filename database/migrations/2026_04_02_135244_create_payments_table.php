@@ -20,7 +20,7 @@ return new class extends Migration
 
             $table->string('amount');
             $table->date('date');
-            $table->payment_method('priority');
+            $table->string('priority');
             $table->enum('status', ['paid', 'pending',]);
 
             $table->timestamps();

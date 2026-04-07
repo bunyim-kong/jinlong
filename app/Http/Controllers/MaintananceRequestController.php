@@ -9,7 +9,12 @@ class MaintananceRequestController extends Controller
 {
     public function index()
     {
-        $requests = MaintananceRquest::all();
-        return view('maintenance.index', compact('requests'));
+        return MaintananceRquest::all(); 
     }   
+
+      
+    public function show (MaintananceRquest $maintananceRequest)
+    {
+        return $maintananceRequest; 
+    }
 }
