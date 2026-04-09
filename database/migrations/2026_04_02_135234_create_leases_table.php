@@ -24,7 +24,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->string('monthly_rent');
-            $table->enum('Status', ['active' , 'endede']);
+            $table->enum('status', ['active', 'endede']);
 
             $table->timestamps();
         });

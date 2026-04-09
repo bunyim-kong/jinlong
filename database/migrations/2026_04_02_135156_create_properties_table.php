@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('type', ['Aprtment', 'Condo', ]);
+            $table->enum('type', ['Apartment', 'Condo']);
             $table->string('address');
-            $table->string('total_unit');
+            $table->integer('total_unit');
             $table->timestamps();
         });
     }
