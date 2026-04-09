@@ -3,41 +3,23 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+// Temporary routes for testing layout
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return view('pages.dashboard');
+})->name('dashboard');
 
+// Placeholder routes to avoid errors
+Route::get('/properties', function () { return view('dashboard'); })->name('properties.index');
+Route::get('/tenants', function () { return view('dashboard'); })->name('tenants.index');
+Route::get('/leases', function () { return view('dashboard'); })->name('leases.index');
+Route::get('/payments', function () { return view('dashboard'); })->name('payments.index');
+Route::get('/maintenance', function () { return view('dashboard'); })->name('maintenance.index');
+Route::get('/reports/payments', function () { return view('dashboard'); })->name('reports.payments');
+Route::get('/reports/occupancy', function () { return view('dashboard'); })->name('reports.occupancy');
+Route::get('/profile', function () { return view('dashboard'); })->name('profile');
+Route::get('/settings', function () { return view('dashboard'); })->name('settings');
 
-
-Route::middleware(['auth'])->group(function () {
-    // Dashboard
-    Route::get('/dashboard', function () {
-        return view('pages.dashboard');
-    })->name('dashboard');
-    
-    // Admin only routes
-    Route::middleware(['role:admin'])->group(function () {
-        Route::resource('properties', PropertyController::class);
-        Route::resource('units', UnitController::class);
-        Route::resource('tenants', TenantController::class);
-        Route::resource('leases', LeaseController::class);
-    });
-    
-    // Tenant only routes
-    Route::middleware(['role:tenant'])->group(function () {
-        Route::get('/my-rental', [TenantController::class, 'myRental']);
-        Route::get('/my-payments', [TenantController::class, 'myPayments']);
-        Route::resource('maintenance', MaintenanceRequestController::class)->only(['index', 'create', 'store']);
-    });
-    
-    // Profile routes
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
-    Route::patch('/profile', [ProfileController::class, 'update']);
-    Route::delete('/profile', [ProfileController::class, 'destroy']);
-});
-
-require __DIR__.'/auth.php';
+// Logout placeholder
+Route::post('/logout', function () {
+    return redirect('/');
+})->name('logout');
