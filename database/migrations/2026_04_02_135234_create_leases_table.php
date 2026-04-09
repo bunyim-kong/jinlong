@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Console\Migrations\StatusCommand;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,6 +14,18 @@ return new class extends Migration
     {
         Schema::create('leases', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('tenant_id');
+            $table->foreign('tenant_id')->references('id')->on('tenants');
+
+            $table->unsignedBigInteger('unit_id');
+            $table->foreign('unit_id')->references('id')->on('units');
+
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->string('monthly_rent');
+            $table->enum('status', ['active', 'endede']);
+
             $table->timestamps();
         });
     }

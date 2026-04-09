@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('lease_id');
+            $table->foreign('lease_id')->references('id')->on('leases');
+
+            $table->string('amount');
+            $table->date('payment_date');
+            $table->string('priority_method');
+            $table->enum('status', ['paid', 'pending',]);
+
             $table->timestamps();
         });
     }

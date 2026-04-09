@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('tenants', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+
+            $table->enum('sex', ['male', 'female']);
+            $table->date('dob');
+            $table->string('address');
+            $table->string('phone_number');
+            $table->string('email')->unique();
             $table->timestamps();
         });
     }
