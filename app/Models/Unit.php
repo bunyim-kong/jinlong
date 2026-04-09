@@ -29,6 +29,6 @@ class Unit extends Model
     }
     public function maintananceRquest()
     {
-        return $this->belongsTo(MaintananceRquest::class, 'unit_id', 'id');
+        return $this->belongsTo(MaintenanceRequest::class, 'unit_id', 'id');
     }
 }

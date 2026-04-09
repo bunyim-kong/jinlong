@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MaintananceRquest extends Model
+class MaintenanceRequest extends Model
 {
-    protected $table = 'maintananceRequests';
+    protected $table = 'maintenance_requests';
 
     protected $primaryKey = 'id'; 
 
@@ -20,4 +20,9 @@ class MaintananceRquest extends Model
     'completion_date',
     'staus',
     ];
+
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class, 'tenant_id', 'id');
+    }
 }

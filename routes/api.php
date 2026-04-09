@@ -4,7 +4,7 @@ use App\Models\Lease;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LeaseController;
-use App\Http\Controllers\MaintananceRequestController;
+use App\Http\Controllers\MaintenanceRequestController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\TenantController;
@@ -18,11 +18,11 @@ Route::get('/user', function (Request $request) {
 Route::get('leases', [LeaseController::class, 'index']);
 Route::get('leases/{id}', [LeaseController::class, 'show']);
 
-Route::get('maintanances', [MaintananceRequestController::class, 'index']);
-Route::get('maintanances/{maintananceRequest}', [MaintananceRequestController::class, 'show']);
+Route::get('maintenances', [MaintenanceRequestController::class, 'index']);
+Route::get('maintenances/{maintenanceRequest}', [MaintenanceRequestController::class, 'show']);
 
 Route::get('payments', [PaymentController::class, 'index']);
-Route::get('payments/id}', [PaymentController::class, 'show']);
+Route::get('payments/{id}', [PaymentController::class, 'show']);
 
 Route::get('tenants', [TenantController::class, 'index']);
 Route::get('tenants/{id}', [TenantController::class, 'show']);

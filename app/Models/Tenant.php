@@ -13,7 +13,7 @@ class Tenant extends Model
     protected $fillable = [
     'user_id',
     'sex',
-    'dop',
+    'dob',
     'address',
     'phone_number',
     'email',
@@ -25,10 +25,10 @@ class Tenant extends Model
 
     public function maintananceRquest()
     {
-        return $this->hasMany(MaintananceRquest::class, 'tenants_id', 'id');
+        return $this->hasMany(MaintenanceRequest::class, 'tenant_id', 'id');
     }
     public function leases()
     {
-        return $this->hasMany(Lease::class, 'tenants_id', 'id');
+        return $this->hasMany(Lease::class, 'tenant_id', 'id');
     }
 }
