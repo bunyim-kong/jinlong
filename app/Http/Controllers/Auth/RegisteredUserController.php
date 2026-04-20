@@ -12,6 +12,14 @@ use App\Providers\RouteServiceProvider;
 
 class RegisteredUserController extends Controller
 {
+    /**
+     * Show the registration form
+     */
+    public function create()
+    {
+        return view('auth.register');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
