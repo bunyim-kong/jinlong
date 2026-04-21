@@ -39,7 +39,7 @@
             </a>
             
             <!-- Properties -->
-            <a href="{{ route('properties.index') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
+            <a href="{{ route('properties') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
                 <i class="fas fa-building w-5 h-5"></i>
                 <span class="ml-3 sidebar-text">Properties</span>
             </a>
@@ -51,7 +51,7 @@
             </a>
             
             <!-- Leases -->
-            <a href="{{ route('leases.index') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
+            <a href="{{ route('leases') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
                 <i class="fas fa-file-signature w-5 h-5"></i>
                 <span class="ml-3 sidebar-text">Leases</span>
             </a>

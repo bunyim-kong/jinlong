@@ -16,4 +16,10 @@ class PropertyController extends Controller
     {
         return $property;
     }
+
+    public function store(Request $request)
+    {
+        $property = Property::create($request->all());
+        return $property;
+    }
 }
