@@ -19,7 +19,8 @@ class PropertyController extends Controller
 
     public function store(Request $request)
     {
-        $property = Property::create($request->all());
-        return $property;
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $password = $request->input('password');
     }
 }
