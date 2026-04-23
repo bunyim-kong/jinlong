@@ -11,15 +11,21 @@ class Payment extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-    'lease_id',
-    'amount',
-    'payment_date',
-    'payment_method',
-    'status',
-];
+        'lease_id',
+        'tenant_id',
+        'amount',
+        'payment_date',
+        'payment_method',
+        'status',
+    ];
 
     public function lease()
     {
         return $this->belongsTo(Lease::class, 'lease_id', 'id');
+    }
+
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class, 'tenant_id', 'id');
     }
 }

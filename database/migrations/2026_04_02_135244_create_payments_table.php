@@ -17,9 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('lease_id');
             $table->foreign('lease_id')->references('id')->on('leases');
 
-            $table->string('amount');
+            $table->decimal('amount', 10, 2);
             $table->date('payment_date');
-            $table->string('priority_method');
+            $table->string('payment_method');
             $table->enum('status', ['paid', 'pending',]);
 
             $table->timestamps();

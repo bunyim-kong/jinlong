@@ -1,76 +1,66 @@
 <?php
 
-use App\Http\Controllers\PropertyController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Models\Tenant;
 use App\Models\Lease;
+use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome'); // change if you have a custom homepage
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
 });
 
-// Dashboard
-Route::get('/dashboard', function () {
-    return view('pages.dashboard');
-})->name('dashboard');
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-// Properties
-Route::get('/properties', function () { 
-    return view('pages.properties'); 
-})->name('properties');
+    Route::get('/properties', function () { 
+        return view('pages.dashboard'); 
+    })->name('properties.index');
+    
+    Route::get('/tenants', function () { 
+        return view('pages.dashboard'); 
+    })->name('tenants.index');
+    
+    Route::get('/leases', function () {
+        $user = auth()->user();
+        $tenant = Tenant::where('user_id', $user->id)->first();
+        $lease = Lease::where('tenant_id', $tenant->id ?? 0)
+                    ->where('status', 'active')
+                    ->with('unit.property')
+                    ->first();
+        return view('pages.leases', compact('lease'));
+    })->name('leases.index');
+    
+    Route::get('/payments', function () { 
+        return view('pages.payments'); 
+    })->name('payments');
+    
+    Route::get('/maintenance', function () { 
+        return view('pages.dashboard'); 
+    })->name('maintenance.index');
+    
+    Route::get('/reports/payments', function () { 
+        return view('pages.dashboard'); 
+    })->name('reports.payments');
+    
+    Route::get('/reports/occupancy', function () { 
+        return view('pages.dashboard'); 
+    })->name('reports.occupancy');
+    
+    Route::get('/profile', function () { 
+        return view('pages.dashboard'); 
+    })->name('profile');
+    
+    Route::get('/settings', function () { 
+        return view('pages.dashboard'); 
+    })->name('settings');
+});
 
-Route::post('/properties', [PropertyController::class, 'store'])
-    ->name('properties.store');
-
-// Tenants
-Route::get('/tenants', function () { 
-    return view('pages.tenants'); 
-})->name('tenants.index');
-
-// Leases (NO auth user now)
-Route::get('/leases', function () {
-
-    // Since auth is removed, just fetch sample or first record
-    $tenant = Tenant::first();
-
-    $lease = null;
-
-    if ($tenant) {
-        $lease = Lease::where('tenant_id', $tenant->id)
-            ->where('status', 'active')
-            ->with('unit.property')
-            ->first();
-    }
-
-    return view('pages.leases', compact('lease'));
-
-})->name('leases');
-
-// Payments
-Route::get('/payments', function () { 
-    return view('pages.payments'); 
-})->name('payments.index');
-
-// Maintenance
-Route::get('/maintenance', function () { 
-    return view('pages.maintenance'); 
-})->name('maintenance.index');
-
-// Reports
-Route::get('/reports/payments', function () { 
-    return view('pages.reports-payments'); 
-})->name('reports.payments');
-
-Route::get('/reports/occupancy', function () { 
-    return view('pages.reports-occupancy'); 
-})->name('reports.occupancy');
-
-// Profile
-Route::get('/profile', function () { 
-    return view('pages.profile'); 
-})->name('profile');
-
-// Settings
-Route::get('/settings', function () { 
-    return view('pages.settings'); 
-})->name('settings');
+Route::get('/', function () {
+    return redirect('/login');
+});

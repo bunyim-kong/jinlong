@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('properties', function (Blueprint $table) {
@@ -16,14 +13,11 @@ return new class extends Migration
             $table->string('name');
             $table->enum('type', ['Apartment', 'Condo']);
             $table->string('address');
-            $table->integer('total_unit');
+            $table->integer('total_units');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('properties');
