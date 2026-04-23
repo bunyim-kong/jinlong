@@ -47,10 +47,6 @@
                 <a href="{{ route('settings') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
                     <i class="fas fa-cog w-4 h-4 mr-3"></i> Settings
                 </a>
-                <hr class="my-2">
-                <a href="#" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fas fa-sign-out-alt w-4 h-4 mr-3"></i> Logout
-                </a>
             </div>
         </div>
     </div>

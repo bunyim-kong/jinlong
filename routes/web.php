@@ -1,25 +1,76 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PropertyController;
 use Illuminate\Support\Facades\Route;
+use App\Models\Tenant;
+use App\Models\Lease;
 
-// Temporary routes for testing layout
+Route::get('/', function () {
+    return view('welcome'); // change if you have a custom homepage
+});
+
+// Dashboard
 Route::get('/dashboard', function () {
     return view('pages.dashboard');
 })->name('dashboard');
 
-// Placeholder routes to avoid errors
-Route::get('/properties', function () { return view('dashboard'); })->name('properties.index');
-Route::get('/tenants', function () { return view('dashboard'); })->name('tenants.index');
-Route::get('/leases', function () { return view('dashboard'); })->name('leases.index');
-Route::get('/payments', function () { return view('dashboard'); })->name('payments.index');
-Route::get('/maintenance', function () { return view('dashboard'); })->name('maintenance.index');
-Route::get('/reports/payments', function () { return view('dashboard'); })->name('reports.payments');
-Route::get('/reports/occupancy', function () { return view('dashboard'); })->name('reports.occupancy');
-Route::get('/profile', function () { return view('dashboard'); })->name('profile');
-Route::get('/settings', function () { return view('dashboard'); })->name('settings');
+// Properties
+Route::get('/properties', function () { 
+    return view('pages.properties'); 
+})->name('properties');
 
-// Logout placeholder
-Route::post('/logout', function () {
-    return redirect('/');
-})->name('logout');
+Route::post('/properties', [PropertyController::class, 'store'])
+    ->name('properties.store');
+
+// Tenants
+Route::get('/tenants', function () { 
+    return view('pages.tenants'); 
+})->name('tenants.index');
+
+// Leases (NO auth user now)
+Route::get('/leases', function () {
+
+    // Since auth is removed, just fetch sample or first record
+    $tenant = Tenant::first();
+
+    $lease = null;
+
+    if ($tenant) {
+        $lease = Lease::where('tenant_id', $tenant->id)
+            ->where('status', 'active')
+            ->with('unit.property')
+            ->first();
+    }
+
+    return view('pages.leases', compact('lease'));
+
+})->name('leases');
+
+// Payments
+Route::get('/payments', function () { 
+    return view('pages.payments'); 
+})->name('payments.index');
+
+// Maintenance
+Route::get('/maintenance', function () { 
+    return view('pages.maintenance'); 
+})->name('maintenance.index');
+
+// Reports
+Route::get('/reports/payments', function () { 
+    return view('pages.reports-payments'); 
+})->name('reports.payments');
+
+Route::get('/reports/occupancy', function () { 
+    return view('pages.reports-occupancy'); 
+})->name('reports.occupancy');
+
+// Profile
+Route::get('/profile', function () { 
+    return view('pages.profile'); 
+})->name('profile');
+
+// Settings
+Route::get('/settings', function () { 
+    return view('pages.settings'); 
+})->name('settings');
