@@ -54,7 +54,7 @@
                 <span class="ml-3 sidebar-text">Leases</span>
             </a>
             
-            <a href="#" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
+            <a href="{{ route('payments') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
                 <i class="fas fa-credit-card w-5 h-5"></i>
                 <span class="ml-3 sidebar-text">Payments</span>
             </a>

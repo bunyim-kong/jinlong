@@ -36,9 +36,7 @@ Route::middleware('auth')->group(function () {
         return view('pages.leases', compact('lease'));
     })->name('leases.index');
     
-    Route::get('/payments', function () { 
-        return view('pages.payments'); 
-    })->name('payments');
+    Route::get('/payments', [App\Http\Controllers\PaymentController::class, 'userPayments'])->name('payments');
     
     Route::get('/maintenance', function () { 
         return view('pages.dashboard'); 
