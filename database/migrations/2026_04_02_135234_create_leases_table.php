@@ -23,8 +23,8 @@ return new class extends Migration
 
             $table->date('start_date');
             $table->date('end_date');
-            $table->string('monthly_rent');
-            $table->enum('status', ['active', 'endede']);
+            $table->decimal('monthly_rent', 10, 2);
+            $table->enum('status', ['active', 'ended']);
 
             $table->timestamps();
         });

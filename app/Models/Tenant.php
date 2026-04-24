@@ -11,24 +11,31 @@ class Tenant extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-    'user_id',
-    'sex',
-    'dob',
-    'address',
-    'phone_number',
-    'email',
-];
+        'user_id',
+        'sex',
+        'dob',
+        'address',
+        'phone_number',
+        'email',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function maintananceRquest()
+    public function maintenanceRequests()
     {
         return $this->hasMany(MaintenanceRequest::class, 'tenant_id', 'id');
     }
+
     public function leases()
     {
         return $this->hasMany(Lease::class, 'tenant_id', 'id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'tenant_id', 'id');
     }
 }

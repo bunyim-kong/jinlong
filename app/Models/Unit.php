@@ -27,8 +27,8 @@ class Unit extends Model
     {
         return $this->hasMany(Lease::class, 'unit_id', 'id');
     }
-    public function maintananceRquest()
+    public function maintenanceRequests()
     {
-        return $this->belongsTo(MaintenanceRequest::class, 'unit_id', 'id');
+        return $this->hasMany(MaintenanceRequest::class, 'unit_id', 'id');
     }
 }

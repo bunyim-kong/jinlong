@@ -22,9 +22,9 @@ return new class extends Migration
 
             $table->string('title');
             $table->text('description');
-            $table->string('priority');
+            $table->enum('priority', ['low', 'medium', 'high']);
             $table->date('request_date');
-            $table->date('completed_date')->nullable();
+            $table->date('completion_date')->nullable();
             $table->enum('status', ['pending', 'in_progress', 'completed', 'cancelled']);
             $table->timestamps();
         });
