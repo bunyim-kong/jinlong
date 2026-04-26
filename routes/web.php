@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Models\Tenant;
-use App\Models\Lease;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\LeaseController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -17,7 +17,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
+    
     Route::get('/properties', function () { 
         return view('pages.dashboard'); 
     })->name('properties.index');
@@ -26,21 +26,13 @@ Route::middleware('auth')->group(function () {
         return view('pages.dashboard'); 
     })->name('tenants.index');
     
-    Route::get('/leases', function () {
-        $user = auth()->user();
-        $tenant = Tenant::where('user_id', $user->id)->first();
-        $lease = Lease::where('tenant_id', $tenant->id ?? 0)
-                    ->where('status', 'active')
-                    ->with('unit.property')
-                    ->first();
-        return view('pages.leases', compact('lease'));
-    })->name('leases.index');
+    // Admin Lease Management - Dynamic
+    Route::get('/leases', [LeaseController::class, 'adminIndex'])->name('leases.index');
     
-    Route::get('/payments', [App\Http\Controllers\PaymentController::class, 'userPayments'])->name('payments');
+    // Admin Payment Management - Dynamic
+    Route::get('/payments', [PaymentController::class, 'adminIndex'])->name('payments');
     
-    Route::get('/maintenance', function () { 
-        return view('pages.dashboard'); 
-    })->name('maintenance.index');
+    Route::get('/maintenance', [App\Http\Controllers\MaintenanceRequestController::class, 'adminIndex'])->name('maintenance.index');
     
     Route::get('/reports/payments', function () { 
         return view('pages.dashboard'); 
