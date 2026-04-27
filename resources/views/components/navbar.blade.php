@@ -26,15 +26,15 @@
             </button>
         </div>
         
-        <!-- User Dropdown -->
+        <!-- User Dropdown - DYNAMIC -->
         <div class="relative" x-data="{ open: false }">
             <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none hover:bg-gray-50 rounded-lg px-2 py-1 transition-colors">
                 <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                    AD
+                    {{ substr(Auth::user()->name ?? 'AD', 0, 2) }}
                 </div>
                 <div class="hidden md:block text-left">
-                    <p class="text-sm font-medium text-gray-700">Admin User</p>
-                    <p class="text-xs text-gray-500">Administrator</p>
+                    <p class="text-sm font-medium text-gray-700">{{ Auth::user()->name ?? 'Admin User' }}</p>
+                    <p class="text-xs text-gray-500">{{ ucfirst(Auth::user()->role ?? 'Administrator') }}</p>
                 </div>
                 <i class="fas fa-chevron-down text-gray-500 text-xs hidden md:block"></i>
             </button>
@@ -47,6 +47,13 @@
                 <a href="{{ route('settings') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
                     <i class="fas fa-cog w-4 h-4 mr-3"></i> Settings
                 </a>
+                <hr class="my-2">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                        <i class="fas fa-sign-out-alt w-4 h-4 mr-3"></i> Logout
+                    </button>
+                </form>
             </div>
         </div>
     </div>
