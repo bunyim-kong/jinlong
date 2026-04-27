@@ -4,11 +4,14 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\LeaseController;
+use App\Http\Controllers\PropertyController;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\Console\Application;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
+    
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
 });
@@ -18,9 +21,8 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-    Route::get('/properties', function () { 
-        return view('pages.dashboard'); 
-    })->name('properties.index');
+    Route::get('/properties', [PropertyController::class, 'index'])->name('properties');
+    Route::post('/properties', [App\Http\Controllers\PropertyController::class, 'store'])->name('properties.store');
     
     Route::get('/tenants', function () { 
         return view('pages.dashboard'); 
