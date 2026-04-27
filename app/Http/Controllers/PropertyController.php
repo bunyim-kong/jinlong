@@ -7,14 +7,9 @@ use App\Models\Property;
 
 class PropertyController extends Controller
 {
-    public function index()
-    {
-        return Property::all();
-    }
-
-    public function show(Property $property)
-    {
-        return $property;
+    public function index (){
+        $nonCollection = Property::paginate(5);
+        return view('pages.properties', compact('nonCollection'));
     }
 
     public function store(Request $request)
@@ -30,5 +25,7 @@ class PropertyController extends Controller
             'email'=>$email,
             'password'=>$password,
         ]);
+        
+        return redirect()->back()->with('success');
     }
 }

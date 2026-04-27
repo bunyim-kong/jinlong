@@ -5,6 +5,19 @@
 
 @section('content')
 
+<div class="w-full">
+    <h1></h1>
+    @foreach($nonCollection as $property)
+        <h1>
+            Name: {{$property->name}}
+        </h1> <br><br>
+        <h2>
+            Type: {{$property->type}}
+        </h2>
+    @endforeach
+    {{$nonCollection->links() }}
+</div>
+
 <div class="min-h-screen flex items-center justify-center bg-gray-100">
     <form action="{{ route('properties.store') }}" method="post" class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md space-y-5">
         @csrf

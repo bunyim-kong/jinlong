@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Models\Tenant;
-use App\Models\Lease;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\LeaseController;
+use App\Http\Controllers\MaintenanceRequestController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -17,46 +18,28 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    Route::get('/properties', function () { 
-        return view('pages.dashboard'); 
-    })->name('properties.index');
     
-    Route::get('/tenants', function () { 
-        return view('pages.dashboard'); 
-    })->name('tenants.index');
+    Route::get('/properties', function () { return view('pages.dashboard'); })->name('properties.index');
+    Route::get('/tenants', function () { return view('pages.dashboard'); })->name('tenants.index');
     
-    Route::get('/leases', function () {
-        $user = auth()->user();
-        $tenant = Tenant::where('user_id', $user->id)->first();
-        $lease = Lease::where('tenant_id', $tenant->id ?? 0)
-                    ->where('status', 'active')
-                    ->with('unit.property')
-                    ->first();
-        return view('pages.leases', compact('lease'));
-    })->name('leases.index');
+    Route::get('/leases', [LeaseController::class, 'index'])->name('leases.index');
+    Route::post('/lease/renewal', [LeaseController::class, 'requestRenewal'])->name('lease.renewal');
     
-    Route::get('/payments', [App\Http\Controllers\PaymentController::class, 'userPayments'])->name('payments');
+    Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
     
-    Route::get('/maintenance', function () { 
-        return view('pages.dashboard'); 
-    })->name('maintenance.index');
+    Route::get('/maintenance', [MaintenanceRequestController::class, 'index'])->name('maintenance.index');
     
-    Route::get('/reports/payments', function () { 
-        return view('pages.dashboard'); 
-    })->name('reports.payments');
+    Route::post('/maintenance/{id}/approve', [MaintenanceRequestController::class, 'approve'])->name('maintenance.approve');
+    Route::post('/maintenance/{id}/complete', [MaintenanceRequestController::class, 'complete'])->name('maintenance.complete');
+    Route::post('/maintenance/{id}/cancel', [MaintenanceRequestController::class, 'cancel'])->name('maintenance.cancel');
+    Route::get('/maintenance/{id}/json', [MaintenanceRequestController::class, 'show'])->name('maintenance.show.json');
+    Route::get('/maintenance/stats', [MaintenanceRequestController::class, 'getStats'])->name('maintenance.stats');
+    Route::post('/maintenance/store', [MaintenanceRequestController::class, 'tenantStore'])->name('maintenance.store');
     
-    Route::get('/reports/occupancy', function () { 
-        return view('pages.dashboard'); 
-    })->name('reports.occupancy');
-    
-    Route::get('/profile', function () { 
-        return view('pages.dashboard'); 
-    })->name('profile');
-    
-    Route::get('/settings', function () { 
-        return view('pages.dashboard'); 
-    })->name('settings');
+    Route::get('/reports/payments', function () { return view('pages.dashboard'); })->name('reports.payments');
+    Route::get('/reports/occupancy', function () { return view('pages.dashboard'); })->name('reports.occupancy');
+    Route::get('/profile', function () { return view('pages.dashboard'); })->name('profile');
+    Route::get('/settings', function () { return view('pages.dashboard'); })->name('settings');
 });
 
 Route::get('/', function () {
