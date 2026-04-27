@@ -4,158 +4,150 @@
 @section('page-title', 'Payment Management')
 
 @section('content')
+
+@php
+    $user = Auth::user();
+@endphp
+
+@if($user->role === 'admin')
+
+<!-- Search and Filter Bar -->
+<div class="bg-white rounded-2xl shadow-sm p-4 border border-gray-100 mb-6">
+    <div class="flex flex-wrap gap-4">
+        <div class="flex-1 min-w-[200px]">
+            <div class="relative">
+                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="searchInput" onkeyup="filterTable()" 
+                       placeholder="Search by tenant, property or unit..." 
+                       class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-green-500">
+            </div>
+        </div>
+        <div>
+            <select id="statusFilter" onchange="filterTable()" 
+                    class="px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-green-500 bg-white">
+                <option value="all">All Status</option>
+                <option value="paid">Paid</option>
+                <option value="pending">Pending</option>
+                <option value="overdue">Overdue</option>
+            </select>
+        </div>
+        <div>
+            <button onclick="resetFilters()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200">
+                <i class="fas fa-redo mr-2"></i> Reset
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Admin Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white rounded-2xl shadow-sm p-6 border">
+        <div class="flex justify-between">
+            <div><p class="text-gray-500 text-sm">Total Paid</p><p class="text-3xl font-bold text-green-600">¥{{ number_format($totalPaid ?? 0) }}</p></div>
+            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center"><i class="fas fa-check-circle text-green-600 text-xl"></i></div>
+        </div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm p-6 border">
+        <div class="flex justify-between">
+            <div><p class="text-gray-500 text-sm">Pending Payments</p><p class="text-3xl font-bold text-yellow-600">¥{{ number_format($totalPending ?? 0) }}</p></div>
+            <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center"><i class="fas fa-clock text-yellow-600 text-xl"></i></div>
+        </div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm p-6 border">
+        <div class="flex justify-between">
+            <div><p class="text-gray-500 text-sm">Overdue Payments</p><p class="text-3xl font-bold text-red-600">¥{{ number_format($totalOverdue ?? 0) }}</p></div>
+            <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center"><i class="fas fa-exclamation-triangle text-red-600 text-xl"></i></div>
+        </div>
+    </div>
+</div>
+
+<!-- Admin Payment Table -->
+<div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full" id="paymentsTable">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500">Tenant</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500">Property / Unit</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500">Amount</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500">Method</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500">Status</th>
+                </tr>
+            </thead>
+            <tbody id="paymentsTableBody">
+                @forelse($payments ?? [] as $payment)
+                <tr class="border-t hover:bg-gray-50 payment-row" data-status="{{ $payment->status }}" data-date="{{ $payment->payment_date }}">
+                    <td class="px-6 py-4">{{ date('M d, Y', strtotime($payment->payment_date)) }}</td>
+                    <td class="px-6 py-4">{{ $payment->lease->tenant->user->name ?? 'Unknown' }}</td>
+                    <td class="px-6 py-4">{{ $payment->lease->unit->property->name ?? 'N/A' }} - Unit #{{ $payment->lease->unit->unit_number ?? 'N/A' }}</td>
+                    <td class="px-6 py-4 font-semibold">¥{{ number_format($payment->amount) }}</td>
+                    <td class="px-6 py-4 capitalize">{{ str_replace('_', ' ', $payment->payment_method) }}</td>
+                    <td class="px-6 py-4"><span class="px-2 py-1 rounded-full text-xs {{ $payment->status == 'paid' ? 'bg-green-100 text-green-700' : ($payment->status == 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700') }}">{{ ucfirst($payment->status) }}</span></td>
+                </tr>
+                @empty
+                <tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">No payments found</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    <div class="px-6 py-4 border-t">{{ ($payments ?? [])->links() }}</div>
+</div>
+
+
+{{-- ========== TENANT VIEW ========== --}}
+@elseif($user->role === 'tenant')
+
 <div class="space-y-6">
-    <!-- Stats Cards -->
+    <!-- Tenant Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all group">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500 text-sm">Total Paid</p>
-                    <p class="text-3xl font-bold text-green-600 mt-1">¥{{ number_format($totalPaid ?? 0) }}</p>
-                </div>
-                <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <i class="fas fa-check-circle text-green-600 text-2xl"></i>
-                </div>
-            </div>
-            <div class="mt-4 flex items-center text-xs text-green-600">
-                <i class="fas fa-arrow-up mr-1"></i> +8% from last month
+        <div class="bg-white rounded-2xl shadow-sm p-6 border">
+            <div class="flex justify-between">
+                <div><p class="text-gray-500 text-sm">Total Paid</p><p class="text-2xl font-bold text-green-600">¥{{ number_format($totalPaid ?? 0) }}</p></div>
+                <i class="fas fa-check-circle text-green-500 text-3xl"></i>
             </div>
         </div>
-
-        <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all group">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500 text-sm">Pending Payments</p>
-                    <p class="text-3xl font-bold text-yellow-600 mt-1">¥{{ number_format($totalPending ?? 0) }}</p>
-                </div>
-                <div class="w-14 h-14 bg-yellow-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <i class="fas fa-clock text-yellow-600 text-2xl"></i>
-                </div>
-            </div>
-            <div class="mt-4 flex items-center text-xs text-yellow-600">
-                <i class="fas fa-calendar mr-1"></i> Awaiting confirmation
+        <div class="bg-white rounded-2xl shadow-sm p-6 border">
+            <div class="flex justify-between">
+                <div><p class="text-gray-500 text-sm">Pending Payments</p><p class="text-2xl font-bold text-yellow-600">¥{{ number_format($totalPending ?? 0) }}</p></div>
+                <i class="fas fa-clock text-yellow-500 text-3xl"></i>
             </div>
         </div>
-
-        <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all group">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500 text-sm">Overdue Payments</p>
-                    <p class="text-3xl font-bold text-red-600 mt-1">¥{{ number_format($totalOverdue ?? 0) }}</p>
-                </div>
-                <div class="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
-                </div>
-            </div>
-            <div class="mt-4 flex items-center text-xs text-red-600">
-                <i class="fas fa-bell mr-1"></i> Requires attention
+        <div class="bg-white rounded-2xl shadow-sm p-6 border">
+            <div class="flex justify-between">
+                <div><p class="text-gray-500 text-sm">Overdue</p><p class="text-2xl font-bold text-red-600">¥{{ number_format($totalOverdue ?? 0) }}</p></div>
+                <i class="fas fa-exclamation-triangle text-red-500 text-3xl"></i>
             </div>
         </div>
     </div>
 
-    <!-- Search & Filters -->
-    <div class="bg-white rounded-2xl shadow-sm p-4 border border-gray-100">
-        <div class="flex flex-wrap gap-4">
-            <div class="flex-1">
-                <div class="relative">
-                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                    <input type="text" id="searchInput" onkeyup="filterTable()" 
-                           placeholder="Search by tenant, property or unit..." 
-                           class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all">
-                </div>
-            </div>
-            <div>
-                <select id="statusFilter" onchange="filterTable()" 
-                        class="px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-green-500 bg-white">
-                    <option value="all">All Status</option>
-                    <option value="paid">Paid</option>
-                    <option value="pending">Pending</option>
-                    <option value="overdue">Overdue</option>
-                </select>
-            </div>
-            <div>
-                <input type="month" id="monthFilter" onchange="filterTable()" 
-                       class="px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-green-500">
-            </div>
-        </div>
-    </div>
-
-    <!-- Payments Table -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <!-- Tenant Payment Table -->
+    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+        <div class="px-6 py-4 border-b"><h3 class="text-lg font-semibold">My Payment History</h3></div>
         <div class="overflow-x-auto">
-            <table class="w-full" id="paymentsTable">
-                <thead>
-                    <tr class="bg-gray-50 border-b border-gray-100">
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Tenant</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Property</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Unit</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Amount</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Method</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                    </tr>
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr><th class="px-6 py-3 text-left text-xs font-medium">Date</th><th class="px-6 py-3 text-left text-xs font-medium">Property</th><th class="px-6 py-3 text-left text-xs font-medium">Amount</th><th class="px-6 py-3 text-left text-xs font-medium">Status</th></tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100">
+                <tbody>
                     @forelse($payments ?? [] as $payment)
-                    <tr class="hover:bg-gray-50 transition-colors payment-row" data-status="{{ $payment->status }}" data-date="{{ $payment->payment_date }}">
-                        <td class="px-6 py-4">
-                            <span class="font-medium text-gray-800">{{ date('M d, Y', strtotime($payment->payment_date)) }}</span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center space-x-3">
-                                <div>
-                                    <p class="font-semibold text-gray-800">{{ $payment->lease->tenant->user->name ?? 'Unknown' }}</p>
-                                    <p class="text-xs text-gray-400">{{ $payment->lease->tenant->email ?? '' }}</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <p class="text-gray-700">{{ $payment->lease->unit->property->name ?? 'N/A' }}</p>
-                        </td>
-                        <td class="px-6 py-4">
-                            <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-lg">#{{ $payment->lease->unit->unit_number ?? 'N/A' }}</span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <p class="font-bold text-gray-800 text-lg">¥{{ number_format($payment->amount) }}</p>
-                        </td>
-                        <td class="px-6 py-4">
-                            <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-lg capitalize">
-                                <i class="fas {{ $payment->payment_method == 'bank_transfer' ? 'fa-university' : ($payment->payment_method == 'credit_card' ? 'fa-credit-card' : 'fa-money-bill') }} mr-1"></i>
-                                {{ str_replace('_', ' ', $payment->payment_method) }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4">
-                            @php
-                                $statusClass = $payment->status == 'paid' ? 'bg-green-100 text-green-700' : ($payment->status == 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700');
-                                $statusIcon = $payment->status == 'paid' ? 'fa-check-circle' : ($payment->status == 'pending' ? 'fa-clock' : 'fa-exclamation-circle');
-                            @endphp
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $statusClass }}">
-                                <i class="fas {{ $statusIcon }} mr-1"></i>
-                                {{ ucfirst($payment->status) }}
-                            </span>
-                        </td>
+                    <tr class="border-t">
+                        <td class="px-6 py-4">{{ date('M d, Y', strtotime($payment->payment_date)) }}</td>
+                        <td class="px-6 py-4">{{ $payment->lease->unit->property->name ?? 'N/A' }} - Unit #{{ $payment->lease->unit->unit_number ?? 'N/A' }}</td>
+                        <td class="px-6 py-4 font-semibold">¥{{ number_format($payment->amount) }}</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-700">{{ ucfirst($payment->status) }}</span></td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="8" class="px-6 py-16 text-center">
-                            <i class="fas fa-receipt text-5xl text-gray-300 mb-4 block"></i>
-                            <p class="text-gray-500">No payments found</p>
-                        </td>
-                    </tr>
+                    <tr><td colspan="4" class="px-6 py-12 text-center text-gray-500">No payments found</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        
-        <!-- Pagination -->
-        <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-between items-center">
-            <p class="text-sm text-gray-500">Showing {{ $payments->count() ?? 0 }} of {{ $payments->total() ?? 0 }} payments</p>
-            <div>
-                {{ ($payments ?? [])->links() }}
-            </div>
-        </div>
+        <div class="px-6 py-4 border-t">{{ ($payments ?? [])->links() }}</div>
     </div>
 </div>
+
+@endif
 
 <script>
 function filterTable() {
@@ -174,6 +166,13 @@ function filterTable() {
         
         row.style.display = matchesSearch && matchesStatus && matchesMonth ? '' : 'none';
     });
+}
+
+function resetFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('statusFilter').value = 'all';
+    document.getElementById('monthFilter').value = '';
+    filterTable();
 }
 </script>
 @endsection

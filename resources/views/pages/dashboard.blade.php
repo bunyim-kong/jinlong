@@ -9,10 +9,8 @@
     $user = Auth::user();
 @endphp
 
-{{-- ========== ADMIN VIEW ========== --}}
 @if($user->role === 'admin')
 
-    <!-- Welcome Banner - Admin -->
     <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl shadow-lg p-6 mb-8 text-white">
         <div class="flex justify-between items-center">
             <div>
@@ -25,7 +23,6 @@
         </div>
     </div>
 
-    <!-- Statistics Cards - Admin -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
             <div class="flex items-center justify-between mb-4">
@@ -68,7 +65,6 @@
         </div>
     </div>
 
-    <!-- Revenue Chart - Admin -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
             <div class="flex justify-between items-center mb-6">
@@ -99,7 +95,6 @@
         </div>
     </div>
 
-    <!-- Recent Payments Table - Admin -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-100">
@@ -150,7 +145,6 @@
         </div>
     </div>
 
-    <!-- Expiring Leases Alert - Admin -->
     @if(($expiringLeases ?? 0) > 0)
     <div class="bg-yellow-50 border border-yellow-200 rounded-2xl p-4">
         <p class="font-semibold text-yellow-800">⚠️ {{ $expiringLeases }} Leases Expiring Soon</p>
@@ -158,11 +152,10 @@
     @endif
 
 
-{{-- ========== TENANT VIEW ========== --}}
 @elseif($user->role === 'tenant')
 
-    <!-- Welcome Banner - Tenant -->
-    <div class="bg-gradient-to-r from-green-600 to-green-800 rounded-2xl shadow-lg p-6 mb-8 text-white">
+
+    <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl shadow-lg p-6 mb-8 text-white">
         <div class="flex justify-between items-center">
             <div>
                 <h2 class="text-2xl font-bold mb-2">Welcome back, {{ $user->name }}!</h2>
@@ -174,7 +167,6 @@
         </div>
     </div>
 
-    <!-- Current Rental Info - Tenant -->
     <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
         <h3 class="text-lg font-bold mb-4">My Current Rental</h3>
         
@@ -202,7 +194,6 @@
         @endif
     </div>
 
-    <!-- Stats Cards - Tenant -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div class="bg-white rounded-2xl shadow-sm p-6">
             <div class="flex items-center justify-between">
@@ -233,7 +224,6 @@
         </div>
     </div>
 
-    <!-- Quick Actions - Tenant -->
     <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
         <h3 class="text-lg font-bold mb-4">Quick Actions</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -252,7 +242,6 @@
         </div>
     </div>
 
-    <!-- Recent Payments - Tenant -->
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-100">
             <h3 class="text-lg font-semibold text-gray-800">Recent Payments</h3>
