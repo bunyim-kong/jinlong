@@ -28,51 +28,52 @@
         </div>
     </div>
     
-    <!-- Navigation Menu -->
     <nav class="flex-1 overflow-y-auto py-4 scrollbar-thin">
         <div class="px-4 mb-2">
             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider sidebar-text">Main Menu</p>
         </div>
         
         <div class="space-y-1">
-            <!-- Dashboard -->
+            <!-- Dashboard - Both roles can see -->
             <a href="{{ route('dashboard') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
                 <i class="fas fa-tachometer-alt w-5 h-5"></i>
                 <span class="ml-3 sidebar-text">Dashboard</span>
             </a>
             
-            <!-- Properties (Placeholder) -->
-            <a href="#" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
+            <!-- Properties - Both roles can see -->
+            <a href="{{ route('properties.index') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
                 <i class="fas fa-building w-5 h-5"></i>
                 <span class="ml-3 sidebar-text">Properties</span>
             </a>
             
-            <!-- Tenants (Placeholder) -->
-            <a href="#" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
+            <!-- TENANTS - ADMIN ONLY -->
+            @if(Auth::user()->role === 'admin')
+            <a href="{{ route('tenants.index') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
                 <i class="fas fa-users w-5 h-5"></i>
                 <span class="ml-3 sidebar-text">Tenants</span>
             </a>
+            @endif
             
-            <!-- Leases (Admin sees all, Tenant sees their lease) -->
+            <!-- Leases - Both roles can see (shows different data) -->
             <a href="{{ route('leases.index') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
                 <i class="fas fa-file-signature w-5 h-5"></i>
                 <span class="ml-3 sidebar-text">Leases</span>
             </a>
             
-            <!-- Payments (Admin sees all, Tenant sees their payments) -->
+            <!-- Payments - Both roles can see (shows different data) -->
             <a href="{{ route('payments') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
                 <i class="fas fa-credit-card w-5 h-5"></i>
                 <span class="ml-3 sidebar-text">Payments</span>
             </a>
             
-            <!-- Maintenance (Admin sees all + approve, Tenant sees their requests + submit) -->
+            <!-- Maintenance - Both roles can see (shows different data) -->
             <a href="{{ route('maintenance.index') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
                 <i class="fas fa-tools w-5 h-5"></i>
                 <span class="ml-3 sidebar-text">Maintenance</span>
             </a>
         </div>
         
-        <!-- Reports Section (Admin only) -->
+        <!-- Reports Section - ADMIN ONLY -->
         @if(Auth::user()->role === 'admin')
         <div class="px-4 mt-8 mb-2">
             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider sidebar-text">Reports</p>
