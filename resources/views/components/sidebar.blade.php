@@ -15,7 +15,6 @@
         </button>
     </div>
     
-    <!-- User Info -->
     <div class="p-4 border-b border-gray-200">
         <div class="flex items-center space-x-3">
             <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
@@ -34,19 +33,16 @@
         </div>
         
         <div class="space-y-1">
-            <!-- Dashboard - Both roles can see -->
             <a href="{{ route('dashboard') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
                 <i class="fas fa-tachometer-alt w-5 h-5"></i>
                 <span class="ml-3 sidebar-text">Dashboard</span>
             </a>
             
-            <!-- Properties - Both roles can see -->
             <a href="{{ route('properties.index') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
                 <i class="fas fa-building w-5 h-5"></i>
                 <span class="ml-3 sidebar-text">Properties</span>
             </a>
             
-            <!-- TENANTS - ADMIN ONLY -->
             @if(Auth::user()->role === 'admin')
             <a href="{{ route('tenants.index') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
                 <i class="fas fa-users w-5 h-5"></i>
@@ -54,26 +50,22 @@
             </a>
             @endif
             
-            <!-- Leases - Both roles can see (shows different data) -->
             <a href="{{ route('leases.index') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
                 <i class="fas fa-file-signature w-5 h-5"></i>
                 <span class="ml-3 sidebar-text">Leases</span>
             </a>
             
-            <!-- Payments - Both roles can see (shows different data) -->
             <a href="{{ route('payments') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
                 <i class="fas fa-credit-card w-5 h-5"></i>
                 <span class="ml-3 sidebar-text">Payments</span>
             </a>
             
-            <!-- Maintenance - Both roles can see (shows different data) -->
             <a href="{{ route('maintenance.index') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors group rounded-lg mx-2">
                 <i class="fas fa-tools w-5 h-5"></i>
                 <span class="ml-3 sidebar-text">Maintenance</span>
             </a>
         </div>
         
-        <!-- Reports Section - ADMIN ONLY -->
         @if(Auth::user()->role === 'admin')
         <div class="px-4 mt-8 mb-2">
             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider sidebar-text">Reports</p>
@@ -92,7 +84,6 @@
         @endif
     </nav>
     
-    <!-- Logout Button -->
     <div class="border-t border-gray-200 p-4">
         <form method="POST" action="{{ route('logout') }}">
             @csrf

@@ -47,7 +47,7 @@
             
             <!-- Page Content -->
             <main class="flex-1 overflow-y-auto p-6 scrollbar-thin">
-                <!-- Breadcrumb -->
+
                 @if(isset($breadcrumbs))
                     <div class="mb-4">
                         <div class="flex items-center text-sm text-gray-600">

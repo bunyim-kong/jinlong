@@ -31,25 +31,25 @@
 
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
-                    <input type="text" name="name" value="{{ old('name') }}" required 
+                    <input type="text" placeholder="Enter your full name" name="name" value="{{ old('name') }}" required 
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
-                    <input type="email" name="email" value="{{ old('email') }}" required 
+                    <input type="email" name="email" placeholder="Enter your email" value="{{ old('email') }}" required 
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Password *</label>
-                    <input type="password" name="password" required 
+                    <input type="password" placeholder="Enter your password" name="password" required 
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password *</label>
-                    <input type="password" name="password_confirmation" required 
+                    <input type="password" placeholder="Enter your comfirm password" name="password_confirmation" required 
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
                 </div>
 
@@ -70,13 +70,13 @@
 
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
-                    <input type="text" name="phone_number" required 
+                    <input type="text" placeholder="Enter your phone number" name="phone_number" required 
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                 </div>
 
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Address *</label>
-                    <textarea name="address" rows="2" required 
+                    <textarea name="address" placeholder="ex: Stung Mean Chey, Phnom Penh" rows="2" required 
                               class="w-full px-4 py-2 border border-gray-300 rounded-lg"></textarea>
                 </div>
 

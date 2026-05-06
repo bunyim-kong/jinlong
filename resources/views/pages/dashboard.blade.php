@@ -79,11 +79,11 @@
         <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
             <div class="space-y-3">
-                <a href="#" class="w-full flex items-center justify-between p-3 bg-blue-50 rounded-xl hover:bg-blue-100">
+                <a href="{{ route('properties.index') }}" class="w-full flex items-center justify-between p-3 bg-blue-50 rounded-xl hover:bg-blue-100">
                     <span>Add New Property</span>
                     <i class="fas fa-arrow-right text-blue-600"></i>
                 </a>
-                <a href="#" class="w-full flex items-center justify-between p-3 bg-green-50 rounded-xl hover:bg-green-100">
+                <a href="{{ route('tenants.index') }}" class="w-full flex items-center justify-between p-3 bg-green-50 rounded-xl hover:bg-green-100">
                     <span>Register New Tenant</span>
                     <i class="fas fa-arrow-right text-green-600"></i>
                 </a>
@@ -227,7 +227,7 @@
     <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
         <h3 class="text-lg font-bold mb-4">Quick Actions</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a href="#" class="flex items-center justify-between p-3 bg-blue-50 rounded-xl hover:bg-blue-100">
+            <a href="{{ route('maintenance.index') }}" class="flex items-center justify-between p-3 bg-blue-50 rounded-xl hover:bg-blue-100">
                 <span>Submit Maintenance Request</span>
                 <i class="fas fa-arrow-right text-blue-600"></i>
             </a>
